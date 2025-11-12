@@ -18,17 +18,43 @@ The workflow follows best practices from _[Reproducible Science in Ecology & Evo
 ```bash
 sia.project.1.wi.data/
 ├─ data/
-│  ├─ processed/           # Clean intermediate data (not exported)
-│  ├─ raw/                 # Excel inputs (not tracked, see .gitignore)
+│  ├─ processed/           
+│  ├─ raw/                
 │  └─ output/
-│     ├─ data/             # Final tidy outputs (CSV/XLSX for Shiny & OSF)
-│     ├─ plots/            # Visualisations
-│     └─ reporting/        # Tables, summaries, figures
+│     ├─ data/             
+│     ├─ plots/            
+│     └─ reporting/        
 ├─ src/
-│  ├─ application/         # Shiny integration, UI and data loading scripts
-│  ├─ function/            # Utility functions (wrangling, validation, helpers)
-│  ├─ reporting/           # Reporting scripts and markdown generators
-│  └─ temp/                # Temporary or testing scripts
+│  ├─ application/         
+│  ├─ function/            
+│  ├─ reporting/           
+│  └─ temp/               
 ├─ .gitignore
 ├─ sia.project.1.wi.data.Rproj
 └─ README.md
+
+## 📥 Inputs (expected in `data/raw/`)
+
+| File | Description |
+|------|--------------|
+| **devices.xlsx** | Core device metadata (manufacturer, model, website, release date, market status, main use, etc.) |
+| **signals.xlsx** | Long format: includes `sampling_rate_min/max`, `additional_info`, and `recording_location` |
+| **technical_specs.xlsx** | Device specifications (battery life, connectivity, etc.) |
+| **data_access.xlsx** | Data storage type, raw data access, SDK/API availability |
+| **rvu_synthesis.xlsx** | Validity, reliability, and usability summaries |
+| **expert_scores.xlsx** | Expert-based scoring (e.g., short-term, long-term) |
+
+> ⚠️ **Important:**  
+> Keep raw files **out of version control**.  
+> Add large or sensitive files to `.gitignore`.
+
+---
+
+## 📤 Outputs (written to `data/output/data/`)
+
+| File | Description |
+|------|--------------|
+| **df_shiny_wi.csv / df_shiny_wi.xlsx** | One row per device, joined metadata (signals not flattened) |
+| **signals_long.csv / signals_long.xlsx** | Per-signal long table (source of truth for signal details) |
+| **df_shiny_wi_flags.csv / df_shiny_wi_flags.xlsx** | Optional availability matrix for quick UI visualisations |
+
