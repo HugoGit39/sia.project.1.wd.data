@@ -32,6 +32,7 @@ sia.project.1.wi.data/
 ├─ .gitignore
 ├─ sia.project.1.wi.data.Rproj
 └─ README.md
+```
 
 ## 📥 Inputs (expected in `data/raw/`)
 
