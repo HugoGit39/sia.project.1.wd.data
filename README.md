@@ -19,16 +19,16 @@ The workflow follows best practices from _[Reproducible Science in Ecology & Evo
 sia.project.1.wi.data/
 ├─ data/
 │  ├─ processed/           
-│  ├─ raw/                
-│  └─ output/
-│     ├─ data/             
-│     ├─ plots/            
-│     └─ reporting/        
+│  ├─ raw/                 
+├─ output/                
+│  ├─ data/                
+│  ├─ plots/               
+│  └─ reporting/           
 ├─ src/
 │  ├─ application/         
 │  ├─ function/            
 │  ├─ reporting/           
-│  └─ temp/               
+│  └─ temp/                
 ├─ .gitignore
 ├─ sia.project.1.wi.data.Rproj
 └─ README.md
