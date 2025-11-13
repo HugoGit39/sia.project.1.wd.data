@@ -148,18 +148,15 @@ scores_wide <- scores %>%
     names_glue = "{score_key}_{reviewer_key}_score"
   )
 
-# ---- assemble the shiny-wide df (one row per device) ----
+# * 10 create final shiny df----
 df_shiny_wi <- devices %>%
-  left_join(signals_wide,   by = "device_id") %>%
-  left_join(specs_wide,     by = "device_id") %>%
-  left_join(data_access,    by = "device_id") %>%
-  left_join(vru,            by = "device_id") %>%
-  left_join(scores_wide,    by = "device_id") %>%
-  relocate(device_id, .before = 1) %>%
-  arrange(device_id)
+  left_join(scores_wide,      by = "device_id") %>%
+  left_join(specs_wide,       by = "device_id") %>%
+  left_join(signals_wide,     by = "device_id") %>%
+  left_join(data_access_wide, by = "device_id") %>%
+  left_join(rvu_wide,         by = "device_id")
 
-# ---- output (ensure folder, then write CSV + Excel) ----
-
-readr::write_csv(df_shiny_wi, here("output","data"))
-writexl::write_xlsx(list(df_shiny_wi = df_shiny_wi), here("output","data"))
+# * 11 write final shiny df----
+write_csv(df_shiny_wi, here("output","data"))
+write_xlsx(list(df_shiny_wi = df_shiny_wi), here("output","data"))
 
