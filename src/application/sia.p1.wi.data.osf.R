@@ -1,8 +1,11 @@
 # * 1  read raw data ----
 source(here("src","application","sia.p1.read.data.R"))
 
-# * 1 devices df ----
-osf_devices <- devices %>%
+# * 2  functions ----
+source(here("src","function","sai.p1.functions.R"))
+
+# * 3 devices df ----
+df_osf_devices <- devices %>%
   mutate(
     # merge numeric cost + textual info
     device_costs = paste_nonempty(device_cost, device_cost_info),
@@ -24,8 +27,8 @@ osf_devices <- devices %>%
     Weight          = weight_gr
   )
 
-# * 2 signals df ----
-osf_signals <- signals_long %>%
+# * 4 signals df ----
+df_osf_signals <- signals_long %>%
   mutate(
     # numeric sampling rates
     sampling_rate_min = suppressWarnings(as.numeric(sampling_rate_min)),
@@ -75,11 +78,8 @@ osf_signals <- signals_long %>%
     `Other signals`  = other_signals
   )
 
-# * 3 technical specs df ----
-# specs already loaded as:
-# specs <- read_xlsx(p_specs) %>% clean_names()
-
-osf_specs <- specs %>%
+# * 5 technical specs ----
+df_osf_specs <- specs %>%
   mutate(
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
   ) %>%
@@ -131,8 +131,8 @@ osf_specs <- specs %>%
     `Bio-feedback`      = Bio_feedback
   )
 
-# * 3 data acces ----
-osf_data_access <- data_access %>%
+# * 6 data acces ----
+df_osf_data_access <- data_access %>%
   mutate(
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
   ) %>%
@@ -223,8 +223,8 @@ osf_data_access <- data_access %>%
     `CE approval/label`       = CE_approval
   )
 
-
-osf_rvu <- rvu %>%
+# * 7 rvu df ----
+df_osf_rvu <- rvu %>%
   mutate(
     # make a stable key from synthesis_type (e.g. "validity_and_reliability", "usability")
     synth_key    = norm_key(synthesis_type),
@@ -272,3 +272,37 @@ osf_rvu <- rvu %>%
     `Hyperlink to the device VRU page`     = VRU_link,
     `Most recent date of RVU search`       = RVU_last_search_date
   )
+
+# * 8 expert scores ----
+df_osf_scores <- scores %>%
+  mutate(
+    score_type = norm_key(score_type),   # "short_term", "long_term"
+    score_by   = norm_key(score_by),     # "rev1", "rev2", "all", ...
+    score      = suppressWarnings(as.numeric(score))
+  ) %>%
+  # keep only the aggregated "all" scores per device
+  filter(score_by == "all") %>%
+  select(device_id, score_type, score) %>%
+  pivot_wider(
+    id_cols    = device_id,
+    names_from = score_type,
+    values_from = score
+  ) %>%
+  transmute(
+    device_id,
+    `SiA Expert score (short-term)` = short_term,
+    `SiA Expert score (long-term)`  = long_term
+  )
+
+# * 9 create final osf df ----
+df_osf <- df_osf_devices %>%
+  left_join(df_osf_signals,     by = "device_id") %>%
+  left_join(df_osf_specs,       by = "device_id") %>%
+  left_join(df_osf_data_access, by = "device_id") %>%
+  left_join(df_osf_rvu,         by = "device_id") %>%
+  left_join(df_osf_scores,      by = "device_id") %>%
+  # remove internal key from final OSF export
+  select(-device_id)
+
+# * 10 write final osf df ----
+write_xlsx(list(df_osf = df_osf), here("output","data","df_osf.xlsx"))

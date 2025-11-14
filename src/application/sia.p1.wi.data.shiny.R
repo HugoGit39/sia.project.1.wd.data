@@ -41,7 +41,7 @@
 source(here("src","application","sia.p1.read.data.R"))
 
 # * 2  functions ----
-source(here("src","function","sia.p1.norm.key.R"))
+source(here("src","function","sai.p1.functions.R"))
 
 # * 3 expert scores (long -> wide) ----
 shiny_scores <- scores %>%
@@ -162,7 +162,7 @@ shiny_rvu <- rvu %>%
     names_glue = "{synth_key}_{.value}"
   )
 
-# * 10 create final shiny df----
+# * 10 create final shiny df ----
 df_shiny_wi <- devices %>%
   left_join(shiny_scores,      by = "device_id") %>%
   left_join(shiny_specs,       by = "device_id") %>%
@@ -170,7 +170,7 @@ df_shiny_wi <- devices %>%
   left_join(shiny_data_access, by = "device_id") %>%
   left_join(shiny_rvu,         by = "device_id")
 
-# * 11 write final shiny df----
+# * 11 write final shiny df ----
 saveRDS(df_shiny_wi, here("data", "processed", "df_shiny_wi.rds"))
 saveRDS(df_shiny_wi, here("output","data", "df_shiny_wi.rds"))
 write_csv(df_shiny_wi, here("output","data", "df_shiny_wi.csv"))

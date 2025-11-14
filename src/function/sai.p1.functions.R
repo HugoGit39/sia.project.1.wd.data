@@ -1,6 +1,15 @@
 ########################################################################
 # Helpers for human-readable sheet
 #
+# norm_key() function
+#   Convert free-text labels (e.g., spec_name, signal_name) into stable,
+#   machine-friendly column keys WITHOUT forcing global uniqueness:
+#   - lowercase
+#   - trim whitespace
+#   - replace non-alphanumeric with "_"
+#   - collapse repeated underscores
+#   - trim leading/trailing underscores
+#
 # yn_to_flag():
 #   Convert various Yes/No-like values (e.g. "Yes", "no", "1", "0")
 #   into integer flags:
@@ -25,6 +34,15 @@
 #
 # Stress in Action 2025
 ########################################################################
+
+norm_key <- function(x) {
+  x %>%
+    tolower() %>%
+    trimws() %>%
+    gsub("[^a-z0-9]+", "_", .) %>%
+    gsub("_+", "_", .) %>%
+    gsub("^_|_$", "", .)
+}
 
 yn_to_flag <- function(x) {
   x <- tolower(trimws(as.character(x)))
