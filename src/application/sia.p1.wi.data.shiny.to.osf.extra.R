@@ -37,7 +37,7 @@ library(writexl)
 library(readr)
 
 # * 2  functions ----
-source(here("src","function","sai.p1.extra.shiny.to.osf.R"))
+source(here("src","function","sai.p1.functions.R"))
 
 # * 3  create df_osf ----
 df_osf <- df_shiny_wi %>%
@@ -238,4 +238,4 @@ df_osf <- df_shiny_wi %>%
   )
 
 # * 4 write final osf df----
-write_xlsx(list(df_osf = df_osf), here("output","data", "df_osf.xlsx"))
+write_xlsx(list(df_osf = df_osf), here("output","data", "df_osf_extra.xlsx"))

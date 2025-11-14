@@ -4,6 +4,9 @@
 # Stress in Action 2025
 ########################################################################
 
+# rm(list = ls(envir = .GlobalEnv), envir = .GlobalEnv)
+# gc()
+
 library(here)       # file paths: here("data","raw","devices.xlsx")
 library(readxl)     # read_xlsx()
 library(dplyr)      # %>%, mutate, group_by, summarise, transmute, left_join, arrange, coalesce

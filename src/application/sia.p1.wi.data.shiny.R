@@ -44,7 +44,7 @@ source(here("src","application","sia.p1.read.data.R"))
 source(here("src","function","sai.p1.functions.R"))
 
 # * 3 expert scores (long -> wide) ----
-shiny_scores <- scores %>%
+df_shiny_scores <- scores %>%
   mutate(
     score_key    = norm_key(score_type),
     reviewer_key = norm_key(score_by),
@@ -59,11 +59,11 @@ shiny_scores <- scores %>%
     names_glue = "{score_key}_{reviewer_key}_score"
   )
 
-# * 5 devices df ----
-shiny_devices <- read_xlsx(p_devices) 
+# * 4 devices df ----
+df_shiny_devices <- read_xlsx(p_devices) 
 
-# * 6 technical specs (long -> wide) ----
-shiny_specs <- specs %>%
+# * 5 technical specs (long -> wide) ----
+df_shiny_specs <- specs %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -86,8 +86,8 @@ shiny_specs <- specs %>%
     names_glue = "{spec_key}_{.value}"
   )
 
-# * 7 signals df (long -> wide) ----
-shiny_signals <- signals_long %>%
+# * 6 signals df (long -> wide) ----
+df_shiny_signals <- signals_long %>%
   mutate(
     signal_key         = norm_key(signal_name),
     sampling_rate_min  = suppressWarnings(as.numeric(sampling_rate_min)),
@@ -113,8 +113,8 @@ shiny_signals <- signals_long %>%
     names_glue = "{signal_key}_{.value}"
   )
 
-# * 8 data acces (long -> wide) ----
-shiny_data_acces <- data_access %>%
+# * 7 data acces (long -> wide) ----
+df_shiny_data_access <- data_access %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -137,8 +137,8 @@ shiny_data_acces <- data_access %>%
     names_glue = "{spec_key}_{.value}"
   )
 
-# * 9 rvu df (long -> wide) ----
-shiny_rvu <- rvu %>%
+# * 8 rvu df (long -> wide) ----
+df_shiny_rvu <- rvu %>%
   mutate(
     synth_key     = norm_key(synthesis_type),
     n_of_studies  = suppressWarnings(as.integer(n_of_studies))
@@ -162,15 +162,15 @@ shiny_rvu <- rvu %>%
     names_glue = "{synth_key}_{.value}"
   )
 
-# * 10 create final shiny df ----
+# * 9 create final shiny df ----
 df_shiny_wi <- devices %>%
-  left_join(shiny_scores,      by = "device_id") %>%
-  left_join(shiny_specs,       by = "device_id") %>%
-  left_join(shiny_signals,     by = "device_id") %>%
-  left_join(shiny_data_access, by = "device_id") %>%
-  left_join(shiny_rvu,         by = "device_id")
+  left_join(df_shiny_scores,      by = "device_id") %>%
+  left_join(df_shiny_specs,       by = "device_id") %>%
+  left_join(df_shiny_signals,     by = "device_id") %>%
+  left_join(df_shiny_data_access, by = "device_id") %>%
+  left_join(df_shiny_rvu,         by = "device_id")
 
-# * 11 write final shiny df ----
+# * 10 write final shiny df ----
 saveRDS(df_shiny_wi, here("data", "processed", "df_shiny_wi.rds"))
 saveRDS(df_shiny_wi, here("output","data", "df_shiny_wi.rds"))
 write_csv(df_shiny_wi, here("output","data", "df_shiny_wi.csv"))

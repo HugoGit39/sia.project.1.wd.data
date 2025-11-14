@@ -1,3 +1,51 @@
+########################################################################
+#
+# Purpose:
+#   Build a single, OSF-ready human-readable table (one row per device)
+#   from raw Excel files. Each block (devices, signals, specs, data
+#   access, RVU, expert scores) is transformed independently and then
+#   merged on `device_id`.
+#
+# Inputs (from data/raw/):
+#   - devices.xlsx
+#   - signals.xlsx
+#   - technical_specs.xlsx
+#   - data_access.xlsx
+#   - rvu_synthesis.xlsx
+#   - expert_scores.xlsx
+#
+# Helper functions (from sai.p1.functions.R):
+#   - yn_to_flag():          Yes/No → 1/0
+#   - rate_str():            min/max → "min-max" string
+#   - paste_nonempty():      combine non-empty fields → "1; text; 64; wrist"
+#   - norm_key():            lowercase machine-safe keys for grouping/pivoting
+#
+# Method (TL;DR):
+#   1) Read all raw Excels using the read script (clean_names applied).
+#   2) Build the six OSF blocks separately:
+#        - df_osf_devices:       general device information
+#        - df_osf_signals:       one column per signal; compact cell format
+#        - df_osf_specs:         water resistance, battery life, charging,
+#                               bio-cueing, bio-feedback
+#        - df_osf_data_access:   raw data, parameters, compatibility,
+#                               software, storage, GDPR/FDA/CE
+#        - df_osf_rvu:           validity & usability synthesis, evidence
+#                               level, number of studies, search date
+#        - df_osf_scores:        aggregated (“all”) short-term & long-term
+#                               SiA Expert scores
+#   3) Pivot long → wide where needed using norm_key() to keep keys stable.
+#   4) Left-join all blocks by device_id into df_osf.
+#   5) Remove device_id for the final OSF-facing export.
+#   6) Write df_osf.xlsx into output/data/.
+#
+# Notes:
+#   - All min/max numeric coercions use suppressWarnings(); empty groups
+#     produce Inf which is converted to NA.
+#   - paste_nonempty() guarantees consistent human-readable formatting.
+#
+# Stress in Action 2025
+########################################################################
+
 # * 1  read raw data ----
 source(here("src","application","sia.p1.read.data.R"))
 
