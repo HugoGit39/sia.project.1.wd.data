@@ -37,26 +37,14 @@
 # Stress in Action 2025
 ########################################################################
 
-# * 1  functions ----
+# * 1  read raw data ----
+source(here("src","application","sia.p1.read.data.R"))
+
+# * 2  functions ----
 source(here("src","function","sia.p1.norm.key.R"))
 
-# * 2 read-in data ----
-p_devices     <- here("data","raw","devices.xlsx")
-p_signals     <- here("data","raw","signals.xlsx")
-p_specs       <- here("data","raw","technical_specs.xlsx")
-p_data_access <- here("data","raw","data_access.xlsx")
-p_rvu         <- here("data","raw","rvu_synthesis.xlsx")
-p_scores      <- here("data","raw","expert_scores.xlsx")
-
-devices <- read_xlsx(p_devices) %>% clean_names()
-signals_long <- read_xlsx(p_signals) %>% clean_names()
-specs <- read_xlsx(p_specs) %>% clean_names()
-data_access <- read_xlsx(p_data_access) %>% clean_names()
-rvu <- read_xlsx(p_rvu) %>% clean_names()
-scores <- read_xlsx(p_scores) %>% clean_names()
-
 # * 3 expert scores (long -> wide) ----
-scores_wide <- scores %>%
+shiny_scores <- scores %>%
   mutate(
     score_key    = norm_key(score_type),
     reviewer_key = norm_key(score_by),
@@ -72,10 +60,10 @@ scores_wide <- scores %>%
   )
 
 # * 5 devices df ----
-devices_raw <- read_xlsx(p_devices) 
+shiny_devices <- read_xlsx(p_devices) 
 
 # * 6 technical specs (long -> wide) ----
-specs_wide <- specs %>%
+shiny_specs <- specs %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -99,7 +87,7 @@ specs_wide <- specs %>%
   )
 
 # * 7 signals df (long -> wide) ----
-signals_wide <- signals_long %>%
+shiny_signals <- signals_long %>%
   mutate(
     signal_key         = norm_key(signal_name),
     sampling_rate_min  = suppressWarnings(as.numeric(sampling_rate_min)),
@@ -126,7 +114,7 @@ signals_wide <- signals_long %>%
   )
 
 # * 8 data acces (long -> wide) ----
-data_access_wide <- data_access %>%
+shiny_data_acces <- data_access %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -150,7 +138,7 @@ data_access_wide <- data_access %>%
   )
 
 # * 9 rvu df (long -> wide) ----
-rvu_wide <- rvu %>%
+shiny_rvu <- rvu %>%
   mutate(
     synth_key     = norm_key(synthesis_type),
     n_of_studies  = suppressWarnings(as.integer(n_of_studies))
@@ -176,11 +164,11 @@ rvu_wide <- rvu %>%
 
 # * 10 create final shiny df----
 df_shiny_wi <- devices %>%
-  left_join(scores_wide,      by = "device_id") %>%
-  left_join(specs_wide,       by = "device_id") %>%
-  left_join(signals_wide,     by = "device_id") %>%
-  left_join(data_access_wide, by = "device_id") %>%
-  left_join(rvu_wide,         by = "device_id")
+  left_join(shiny_scores,      by = "device_id") %>%
+  left_join(shiny_specs,       by = "device_id") %>%
+  left_join(shiny_signals,     by = "device_id") %>%
+  left_join(shiny_data_access, by = "device_id") %>%
+  left_join(shiny_rvu,         by = "device_id")
 
 # * 11 write final shiny df----
 saveRDS(df_shiny_wi, here("data", "processed", "df_shiny_wi.rds"))
