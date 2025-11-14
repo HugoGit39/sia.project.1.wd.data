@@ -163,7 +163,7 @@ df_shiny_rvu <- rvu %>%
   )
 
 # * 9 create final shiny df ----
-df_shiny_wi <- df_shiny_scores %>%
+df_shiny_wi_subset <- df_shiny_scores %>%
   left_join(df_shiny_devices,   by = "device_id") %>%
   left_join(df_shiny_specs,     by = "device_id") %>%
   left_join(df_shiny_signals,   by = "device_id") %>%
@@ -171,8 +171,18 @@ df_shiny_wi <- df_shiny_scores %>%
   left_join(df_shiny_rvu,       by = "device_id")
 
 # * 10 write final shiny df ----
-saveRDS(df_shiny_wi, here("data", "processed", "df_shiny_wi.rds"))
-saveRDS(df_shiny_wi, here("output","data", "df_shiny_wi.rds"))
-write_csv(df_shiny_wi, here("output","data", "df_shiny_wi.csv"))
-write_xlsx(list(df_shiny_wi = df_shiny_wi), here("output","data", "df_shiny_wi.xlsx"))
+saveRDS(df_shiny_wi_subset, here("data", "processed", "df_shiny_wi_subset.rds"))
+saveRDS(df_shiny_wi_subset, here("output","data", "df_shiny_wi_subset.rds"))
 
+# * 11 merge with final shiny df ----
+
+#read main df_shiny_wi
+df_shiny_wi <- readRDS(here("data", "processed", "df_shiny_wi.rds"))
+
+#ALWAYS REPLACE WITH UPDATED SUBSET
+df_shiny_wi <- df_shiny_wi %>%
+  filter(!device_id %in% df_shiny_wi$device_id) %>%
+  bind_rows(df_shiny_wi_subset)
+
+#save
+saveRDS(df_shiny_wi, here("output","data", "df_shiny_wi.rds"))
