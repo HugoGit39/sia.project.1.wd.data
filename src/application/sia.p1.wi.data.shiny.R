@@ -37,19 +37,10 @@
 # Stress in Action 2025
 ########################################################################
 
-# * 1 packages ----
-library(here)
-library(readxl)
-library(dplyr)
-library(tidyr)
-library(janitor)
-library(writexl)
-library(readr)
+# * 1  functions ----
+source(here("src","function","sia.p1.norm.key.R"))
 
-# * 2  functions ----
-source(here("src","function","norm_key.R"))
-
-# * 3 read-in data ----
+# * 2 read-in data ----
 p_devices     <- here("data","raw","devices.xlsx")
 p_signals     <- here("data","raw","signals.xlsx")
 p_specs       <- here("data","raw","technical_specs.xlsx")
@@ -64,7 +55,7 @@ data_access <- read_xlsx(p_data_access) %>% clean_names()
 rvu <- read_xlsx(p_rvu) %>% clean_names()
 scores <- read_xlsx(p_scores) %>% clean_names()
 
-# * 4 expert scores (long -> wide) ----
+# * 3 expert scores (long -> wide) ----
 scores_wide <- scores %>%
   mutate(
     score_key    = norm_key(score_type),
