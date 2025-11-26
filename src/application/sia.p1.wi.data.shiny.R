@@ -177,7 +177,7 @@ saveRDS(df_shiny_wi_subset, here("output","data", "df_shiny_wi_subset.rds"))
 # * 11 merge with final shiny df ----
 
 #read main df_shiny_wi
-df_shiny_wi <- readRDS(here("data", "processed", "df_shiny_wi.rds"))
+df_shiny_wi <- readRDS(here("data", "processed", "df_shiny_wi_subset.rds"))
 
 #ALWAYS REPLACE WITH UPDATED SUBSET
 df_shiny_wi <- df_shiny_wi %>%
