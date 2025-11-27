@@ -38,7 +38,7 @@ date_suffix <- format(Sys.Date(), "%Y%m%d")
 df_wide_sia_wd <- read_rds(here("data","processed",paste0("df_wide_sia_wd_", date_suffix, ".rds")))
 
 # * 3  create df_osf ----
-df_osf_sia_wd <- df_wide_sia_wd_subset %>%
+df_osf_sia_wd <- df_wide_sia_wd %>%
   # first create all derived columns we need
   mutate(
 

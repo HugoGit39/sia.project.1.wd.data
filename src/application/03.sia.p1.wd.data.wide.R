@@ -37,13 +37,10 @@
 # Stress in Action 2025
 ########################################################################
 
-# * 1  read raw data ----
-source(here("src","application","sia.p1.read.data.R"))
-
-# * 2  functions ----
+# * 1  functions ----
 source(here("src","function","sai.p1.functions.R"))
 
-# * 3 expert scores (long -> wide) ----
+# * 2 expert scores (long -> wide) ----
 df_wide_scores <- scores %>%
   mutate(
     score_key    = norm_key(score_type),
@@ -59,10 +56,10 @@ df_wide_scores <- scores %>%
     names_glue = "{score_key}_{reviewer_key}_score"
   )
 
-# * 4 devices df ----
+# * 3 devices df ----
 df_wide_devices <- read_xlsx(p_devices) 
 
-# * 5 technical specs (long -> wide) ----
+# * 4 technical specs (long -> wide) ----
 df_wide_specs <- specs %>%
   mutate(
     spec_key       = norm_key(spec_name),
@@ -86,7 +83,7 @@ df_wide_specs <- specs %>%
     names_glue = "{spec_key}_{.value}"
   )
 
-# * 6 signals df (long -> wide) ----
+# * 5 signals df (long -> wide) ----
 df_wide_signals <- signals_long %>%
   mutate(
     signal_key         = norm_key(signal_name),
@@ -113,7 +110,7 @@ df_wide_signals <- signals_long %>%
     names_glue = "{signal_key}_{.value}"
   )
 
-# * 7 data acces (long -> wide) ----
+# * 6 data acces (long -> wide) ----
 df_wide_data_access <- data_access %>%
   mutate(
     spec_key       = norm_key(spec_name),
@@ -137,7 +134,7 @@ df_wide_data_access <- data_access %>%
     names_glue = "{spec_key}_{.value}"
   )
 
-# * 8 rvu df (long -> wide) ----
+# * 7 rvu df (long -> wide) ----
 df_wide_rvu <- rvu %>%
   mutate(
     synth_key     = norm_key(synthesis_type),
@@ -162,7 +159,7 @@ df_wide_rvu <- rvu %>%
     names_glue = "{synth_key}_{.value}"
   )
 
-# * 9 create final shiny df ----
+# * 8 create final shiny df ----
 df_wide_sia_wd <- df_wide_scores %>%
   left_join(df_wide_devices,   by = "device_id") %>%
   left_join(df_wide_specs,     by = "device_id") %>%
@@ -170,7 +167,7 @@ df_wide_sia_wd <- df_wide_scores %>%
   left_join(df_wide_data_access, by = "device_id") %>%
   left_join(df_wide_rvu,       by = "device_id")
 
-# * 10 write final wide df ----
+# * 9 write final wide df ----
 
 # Create today date
 date_suffix <- format(Sys.Date(), "%Y%m%d")
