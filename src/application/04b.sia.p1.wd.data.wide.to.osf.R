@@ -45,9 +45,6 @@ df_osf_sia_wd <- df_wide_sia_wd %>%
 # * * 3.1  devices ----
     device_costs = paste_nonempty(device_cost, device_cost_info),
     
-    # size: prefer rectangular, else round
-    size = coalesce(size_rect_mm, size_round_mm),
-    
     # compatibility merged from data_access specs
     compatibility = paste_nonempty(
       ifelse(!is.na(windows_compatible_spec_boel_value),
@@ -185,8 +182,8 @@ df_osf_sia_wd <- df_wide_sia_wd %>%
     `Device costs`            = device_costs,
     `Wearable type`           = wearable_type,
     Location                  = location,
-    Size                      = size,
     Weight                    = weight_gr,
+    Size                      = size_mm,
     
     PPG                       = PPG,
     ECG                       = ECG,
