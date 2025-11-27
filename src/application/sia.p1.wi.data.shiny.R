@@ -1,7 +1,7 @@
 ########################################################################
 #
 # Purpose:
-#   Build a single, Shiny-ready table (one row per device) by
+#   Build a single, wide-read table (one row per device) by
 #   reading raw Excels, pivoting long→wide where needed, and
 #   joining everything on `device_id`.
 #
@@ -14,8 +14,8 @@
 #   - expert_scores.xlsx        (long: score_type x reviewer)
 #
 # Outputs (to output/data/):
-#   - df_shiny_wi.csv
-#   - df_shiny_wi.xlsx
+#   - df_wide_wi.csv
+#   - df_wide_wi.xlsx
 #
 # Method (TL;DR):
 #   1) read_xlsx() + clean_names()
@@ -27,7 +27,7 @@
 #        - signals:      {signal}_{available|sampling_rate_min|max|additional_info|recording_location}
 #        - data_access:  {spec}_{boel|num_value|num_unit|char_value}
 #        - rvu:          {synthesis_type}_{n_of_studies|evidence_level|parameters_studied|synthesis|date_of_last_search}
-#   4) left_join(...) by device_id into df_shiny_wi
+#   4) left_join(...) by device_id into df_wide_wi
 #   5) write CSV + XLSX
 #
 # Notes:
@@ -44,7 +44,7 @@ source(here("src","application","sia.p1.read.data.R"))
 source(here("src","function","sai.p1.functions.R"))
 
 # * 3 expert scores (long -> wide) ----
-df_shiny_scores <- scores %>%
+df_wide_scores <- scores %>%
   mutate(
     score_key    = norm_key(score_type),
     reviewer_key = norm_key(score_by),
@@ -60,10 +60,10 @@ df_shiny_scores <- scores %>%
   )
 
 # * 4 devices df ----
-df_shiny_devices <- read_xlsx(p_devices) 
+df_wide_devices <- read_xlsx(p_devices) 
 
 # * 5 technical specs (long -> wide) ----
-df_shiny_specs <- specs %>%
+df_wide_specs <- specs %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -87,7 +87,7 @@ df_shiny_specs <- specs %>%
   )
 
 # * 6 signals df (long -> wide) ----
-df_shiny_signals <- signals_long %>%
+df_wide_signals <- signals_long %>%
   mutate(
     signal_key         = norm_key(signal_name),
     sampling_rate_min  = suppressWarnings(as.numeric(sampling_rate_min)),
@@ -114,7 +114,7 @@ df_shiny_signals <- signals_long %>%
   )
 
 # * 7 data acces (long -> wide) ----
-df_shiny_data_access <- data_access %>%
+df_wide_data_access <- data_access %>%
   mutate(
     spec_key       = norm_key(spec_name),
     spec_num_value = suppressWarnings(as.numeric(spec_num_value))
@@ -138,7 +138,7 @@ df_shiny_data_access <- data_access %>%
   )
 
 # * 8 rvu df (long -> wide) ----
-df_shiny_rvu <- rvu %>%
+df_wide_rvu <- rvu %>%
   mutate(
     synth_key     = norm_key(synthesis_type),
     n_of_studies  = suppressWarnings(as.integer(n_of_studies))
@@ -163,26 +163,26 @@ df_shiny_rvu <- rvu %>%
   )
 
 # * 9 create final shiny df ----
-df_shiny_wi_subset <- df_shiny_scores %>%
-  left_join(df_shiny_devices,   by = "device_id") %>%
-  left_join(df_shiny_specs,     by = "device_id") %>%
-  left_join(df_shiny_signals,   by = "device_id") %>%
-  left_join(df_shiny_data_access, by = "device_id") %>%
-  left_join(df_shiny_rvu,       by = "device_id")
+df_wide_wi_subset <- df_wide_scores %>%
+  left_join(df_wide_devices,   by = "device_id") %>%
+  left_join(df_wide_specs,     by = "device_id") %>%
+  left_join(df_wide_signals,   by = "device_id") %>%
+  left_join(df_wide_data_access, by = "device_id") %>%
+  left_join(df_wide_rvu,       by = "device_id")
 
 # * 10 write final shiny df ----
-saveRDS(df_shiny_wi_subset, here("data", "processed", "df_shiny_wi_subset.rds"))
-saveRDS(df_shiny_wi_subset, here("output","data", "df_shiny_wi_subset.rds"))
+saveRDS(df_wide_wi_subset, here("data", "processed", "df_wide_wi_subset.rds"))
+saveRDS(df_wide_wi_subset, here("output","data", "df_wide_wi_subset.rds"))
 
 # * 11 merge with final shiny df ----
 
-#read main df_shiny_wi
-df_shiny_wi <- readRDS(here("data", "processed", "df_shiny_wi_subset.rds"))
+#read main df_wide_wi
+df_wide_wi <- readRDS(here("data", "processed", "df_wide_wi_subset.rds"))
 
 #ALWAYS REPLACE WITH UPDATED SUBSET
-df_shiny_wi <- df_shiny_wi %>%
-  filter(!device_id %in% df_shiny_wi$device_id) %>%
-  bind_rows(df_shiny_wi_subset)
+df_wide_wi <- df_wide_wi %>%
+  filter(!device_id %in% df_wide_wi$device_id) %>%
+  bind_rows(df_wide_wi_subset)
 
 #save
-saveRDS(df_shiny_wi, here("output","data", "df_shiny_wi.rds"))
+saveRDS(df_wide_wi, here("output","data", "df_wide_wi.rds"))
