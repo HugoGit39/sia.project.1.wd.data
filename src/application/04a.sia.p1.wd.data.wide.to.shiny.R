@@ -62,7 +62,8 @@ df_shiny_sia_wd_filter <- df_wide_sia_wd %>%
 
 # (B) Info table (everything else)
 df_shiny_sia_wd_info <- df_wide_sia_wd %>%
-  select(-any_of(product_filter_cols))
+  select(-any_of(setdiff(product_filter_cols, "device_id"))
+  )
 
 # * 4  Save outputs ----
 saveRDS(df_shiny_sia_wd_filter, here("data", "processed", paste0("df_shiny_sia_wd_filter_", date_suffix, ".rds")))
