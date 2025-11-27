@@ -236,5 +236,5 @@ df_osf_sia_wd <- df_wide_sia_wd_subset %>%
   )
 
 # * 4 write final osf df----
-write_xlsx(list(df_osf_sia_wd = df_osf_sia_wd), here(paste0("output","data", "df_osf_sia_wd", date_suffix, "xlsx")))
-saveRDS(df_osf_sia_wd, here("data", "output", paste0("df_osf_sia_wd_shiny.rds")))
+write_xlsx(list(df_osf_sia_wd = df_osf_sia_wd), here("data","processed", paste0("df_osf_sia_wd_", date_suffix, "xlsx")))
+saveRDS(df_osf_sia_wd, here("data", "processed", paste0("df_osf_sia_wd_shiny.rds")))
