@@ -1,5 +1,38 @@
 ########################################################################
-# Create Shiny-ready datasets: filter & info
+# Build Shiny-ready tables for filtering & detailed info
+#
+# Purpose:
+#   Split the wide master table (one row per device) into:
+#     1) A compact filter table used by the Shiny filters
+#        (df_shiny_sia_wd_filter)
+#     2) A complementary info table with all remaining columns
+#        (df_shiny_sia_wd_info) that can be shown in
+#        "details" views / popups, etc.
+#
+# Inputs (from data/processed/):
+#   - df_wide_sia_wd_<YYYYMMDD>.rds
+#       Full wide dataset:
+#         * 1 row per device
+#         * All scores, specs, signals, data access & RVU fields
+#
+# Outputs (to data/processed/):
+#   - df_shiny_sia_wd_filter_<YYYYMMDD>.rds
+#       * Only columns used in:
+#           - product comparison filter
+#           - feature filter
+#       * Includes device_id + key metadata + yes/no flags + numerics
+#
+#   - df_shiny_sia_wd_info_<YYYYMMDD>.rds
+#       * device_id + all NON-filter columns
+#       * Ready to be joined back (by device_id) for:
+#           - "Show details" buttons in reactable
+#           - extra technical / textual info per device
+#
+# Notes:
+#   - device_id lives in BOTH tables and is the only key you need to
+#     re-attach detailed info to filtered results.
+#
+# Stress in Action 2025
 ########################################################################
 
 # * 1  Load wide dataset ----
