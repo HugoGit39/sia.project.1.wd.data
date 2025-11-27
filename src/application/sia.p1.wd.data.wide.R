@@ -163,7 +163,7 @@ df_wide_rvu <- rvu %>%
   )
 
 # * 9 create final shiny df ----
-df_wide_sia_wd_subset <- df_wide_scores %>%
+df_wide_sia_wd <- df_wide_scores %>%
   left_join(df_wide_devices,   by = "device_id") %>%
   left_join(df_wide_specs,     by = "device_id") %>%
   left_join(df_wide_signals,   by = "device_id") %>%
@@ -176,5 +176,5 @@ df_wide_sia_wd_subset <- df_wide_scores %>%
 date_suffix <- format(Sys.Date(), "%Y%m%d")
 
 # Save RDS files with the date appended
-saveRDS(df_wide_sia_wd_subset, here("data", "processed", paste0("df_wide_sia_wd_subset_", date_suffix, ".rds")))
+saveRDS(df_wide_sia_wd, here("data", "processed", paste0("df_wide_sia_wd_", date_suffix, ".rds")))
 

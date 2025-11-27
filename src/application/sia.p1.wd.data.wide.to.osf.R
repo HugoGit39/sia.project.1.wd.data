@@ -35,10 +35,10 @@ source(here("src","function","sai.p1.functions.R"))
 # Create today date
 date_suffix <- format(Sys.Date(), "%Y%m%d")
 
-df_wide_sia_wd_subset <- read_rds(here("data","processed",paste0("df_wide_sia_wd_subset_", date_suffix, ".rds")))
+df_wide_sia_wd <- read_rds(here("data","processed",paste0("df_wide_sia_wd_", date_suffix, ".rds")))
 
 # * 3  create df_osf ----
-df_osf_sia_wd_subset <- df_wide_sia_wd_subset %>%
+df_osf_sia_wd <- df_wide_sia_wd_subset %>%
   # first create all derived columns we need
   mutate(
 
@@ -236,4 +236,5 @@ df_osf_sia_wd_subset <- df_wide_sia_wd_subset %>%
   )
 
 # * 4 write final osf df----
-write_xlsx(list(df_osf_sia_wd_subset = df_osf_sia_wd_subset), here(paste0("output","data", "df_osf_sia_wd_subset", date_suffix, "xlsx")))
+write_xlsx(list(df_osf_sia_wd = df_osf_sia_wd), here(paste0("output","data", "df_osf_sia_wd", date_suffix, "xlsx")))
+saveRDS(df_osf_sia_wd, here("data", "output", paste0("df_osf_sia_wd_shiny.rds")))
