@@ -1,12 +1,12 @@
 ########################################################################
-# Build OSF-ready overview df (EXTRA STEP)
+# Build OSF-ready overview df 
 #
 # Purpose:
 #   Create a c human-readable overview (one row per device)
-#   for OSF / Excel, starting FROM the wide df_shiny_wi.
+#   for OSF / Excel, starting FROM the wide df_wide_sia_wd_subset.
 #
 # Important:
-#   - This is an extra, convenience layer on top of df_shiny_wi.
+#   - This is an extra, convenience layer on top of df_wide_sia_wd_subset.
 #
 # What happens here:
 #   1) Create derived columns:
@@ -19,7 +19,7 @@
 #   3) Write df_osf.xlsx to output/data/
 #
 # Inputs:
-#   df_shiny_wi  (from the wide pipeline)
+#   df_wide_sia_wd_subset  (from the wide pipeline)
 #
 # Output:
 #   output/data/df_osf.xlsx
@@ -38,7 +38,7 @@ date_suffix <- format(Sys.Date(), "%Y%m%d")
 df_wide_sia_wd_subset <- read_rds(here("data","processed",paste0("df_wide_sia_wd_subset_", date_suffix, ".rds")))
 
 # * 3  create df_osf ----
-df_osf_sia_wd_subset <- df_shiny_wi %>%
+df_osf_sia_wd_subset <- df_wide_sia_wd_subset %>%
   # first create all derived columns we need
   mutate(
 

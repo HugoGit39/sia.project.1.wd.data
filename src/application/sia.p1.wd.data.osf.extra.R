@@ -1,5 +1,9 @@
 ########################################################################
 #
+# THIS CODE IS NOT USED IN THE CURRENT ANALYSIS PIPELINE!!!!!!!
+#
+# USE src/application/sia.p1.wd.data.wide.to.osf.R INSTEAD!!!!
+#
 # Purpose:
 #   Build a single, OSF-ready human-readable table (one row per device)
 #   from raw Excel files. Each block (devices, signals, specs, data
