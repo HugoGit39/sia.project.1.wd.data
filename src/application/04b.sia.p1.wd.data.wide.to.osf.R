@@ -175,6 +175,7 @@ df_osf_sia_wd <- df_wide_sia_wd %>%
   ) %>%
   # rename columns into the final layout
   transmute(
+    device_id,
     Manufacturer              = manufacturer,
     Device                    = model,
     Website                   = website,
