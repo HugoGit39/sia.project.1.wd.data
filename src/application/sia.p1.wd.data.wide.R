@@ -176,5 +176,5 @@ df_wide_sia_wd_subset <- df_wide_scores %>%
 date_suffix <- format(Sys.Date(), "%Y%m%d")
 
 # Save RDS files with the date appended
-saveRDS(df_wide_sia_wd_subset, here("data", "processed", paste0("df_wide_sia_wd_subset", date_suffix, ".rds")))
+saveRDS(df_wide_sia_wd_subset, here("data", "processed", paste0("df_wide_sia_wd_subset_", date_suffix, ".rds")))
 

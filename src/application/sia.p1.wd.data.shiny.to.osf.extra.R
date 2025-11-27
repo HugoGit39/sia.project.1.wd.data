@@ -27,20 +27,18 @@
 # Stress in Action 2025
 ########################################################################
 
-# * 1 packages ----
-library(here)
-library(readxl)
-library(dplyr)
-library(tidyr)
-library(janitor)
-library(writexl)
-library(readr)
-
-# * 2  functions ----
+# * 1  functions ----
 source(here("src","function","sai.p1.functions.R"))
 
+# * 2  read wide  data wd df ----
+
+# Create today date
+date_suffix <- format(Sys.Date(), "%Y%m%d")
+
+df_wide_sia_wd_subset <- read_rds(here("data","processed",paste0("df_wide_sia_wd_subset_", date_suffix, ".rds")))
+
 # * 3  create df_osf ----
-df_osf <- df_shiny_wi %>%
+df_osf_sia_wd_subset <- df_shiny_wi %>%
   # first create all derived columns we need
   mutate(
 
@@ -238,4 +236,4 @@ df_osf <- df_shiny_wi %>%
   )
 
 # * 4 write final osf df----
-write_xlsx(list(df_osf = df_osf), here("output","data", "df_osf_extra.xlsx"))
+write_xlsx(list(df_osf_sia_wd_subset = df_osf_sia_wd_subset), here(paste0("output","data", "df_osf_sia_wd_subset", date_suffix, "xlsx")))
