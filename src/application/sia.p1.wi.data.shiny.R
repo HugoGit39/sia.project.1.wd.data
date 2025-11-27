@@ -163,26 +163,18 @@ df_wide_rvu <- rvu %>%
   )
 
 # * 9 create final shiny df ----
-df_wide_wi_subset <- df_wide_scores %>%
+df_wide_sia_wd_subset <- df_wide_scores %>%
   left_join(df_wide_devices,   by = "device_id") %>%
   left_join(df_wide_specs,     by = "device_id") %>%
   left_join(df_wide_signals,   by = "device_id") %>%
   left_join(df_wide_data_access, by = "device_id") %>%
   left_join(df_wide_rvu,       by = "device_id")
 
-# * 10 write final shiny df ----
-saveRDS(df_wide_wi_subset, here("data", "processed", "df_wide_wi_subset.rds"))
-saveRDS(df_wide_wi_subset, here("output","data", "df_wide_wi_subset.rds"))
+# * 10 write final wide df ----
 
-# * 11 merge with final shiny df ----
+# Create today date
+date_suffix <- format(Sys.Date(), "%Y%m%d")
 
-#read main df_wide_wi
-df_wide_wi <- readRDS(here("data", "processed", "df_wide_wi_subset.rds"))
+# Save RDS files with the date appended
+saveRDS(df_wide_sia_wd_subset, here("data", "processed", paste0("df_wide_sia_wd_subset", date_suffix, ".rds")))
 
-#ALWAYS REPLACE WITH UPDATED SUBSET
-df_wide_wi <- df_wide_wi %>%
-  filter(!device_id %in% df_wide_wi$device_id) %>%
-  bind_rows(df_wide_wi_subset)
-
-#save
-saveRDS(df_wide_wi, here("output","data", "df_wide_wi.rds"))
