@@ -32,7 +32,8 @@ sia.project.1.wi.data/
 │  ├─ application/         
 │  ├─ function/            
 │  ├─ reporting/           
-│  └─ temp/                
+├─ temp/
+├─ www/               
 ├─ .gitignore
 ├─ sia.project.1.wi.data.Rproj
 └─ README.md
