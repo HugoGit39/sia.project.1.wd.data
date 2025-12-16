@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/HugoGit39/sia.project.1.wi.data/refs/heads/main/www/siawd_relational_pipeline.png" alt="SIA Pipeline">
+</p>
+
 # sia.project.1.wi.data
 
 Data-wrangling pipeline to build **Shiny-ready** and **OSF-ready** datasets for the SiA Wearable Database Interface.  
