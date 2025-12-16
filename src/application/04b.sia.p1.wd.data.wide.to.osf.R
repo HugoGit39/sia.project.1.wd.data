@@ -150,21 +150,22 @@ df_osf_sia_wd <- df_wide_sia_wd %>%
     CE_approval          = yn_to_flag(ce_marking_spec_boel_value),
     
 # * * 3.5  rvu ----
-    Highest_validation_evidence =
-      validity_and_reliability_evidence_level,
-    N_validity_reliability =
-      validity_and_reliability_n_of_studies,
-    RVU_studied_parameters =
-      validity_and_reliability_parameters_studied,
-    RVU_validity_synthesis =
-      validity_and_reliability_synthesis,
-    N_usability_studies =
-      usability_n_of_studies,
-    RVU_usability_synthesis =
-      usability_synthesis,
-    RVU_last_search_date =
-      coalesce(validity_and_reliability_date_of_last_search,
-               usability_date_of_last_search),
+Highest_validation_evidence =
+  reliability_and_validity_evidence_level,
+N_validity_reliability =
+  reliability_and_validity_n_of_studies,
+RVU_studied_parameters =
+  reliability_and_validity_parameters_studied,
+RVU_validity_synthesis =
+  reliability_and_validity_synthesis,
+N_usability_studies =
+  usability_n_of_studies,
+RVU_usability_synthesis =
+  usability_synthesis,
+RVU_last_search_date =
+  coalesce(reliability_and_validity_date_of_last_search,
+           usability_date_of_last_search),
+
     
 # * * 3.6  expert scores scores ----
     SiA_score_short_term = short_term_all_score,

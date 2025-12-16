@@ -81,10 +81,10 @@ product_filter_cols <- c(
   "server_data_storage_spec_boel_value",
   "dev_storage_cap_hr_spec_num_value",
   "dev_storage_cap_mb_spec_num_value",
+  "reliability_and_validity_n_of_studies",
   "usability_n_of_studies",
-  "validity_and_reliability_n_of_studies",
-  "usability_evidence_level",
-  "validity_and_reliability_evidence_level"
+  "reliability_and_validity_evidence_level",
+  "usability_evidence_level"
 )
 
 # * 3  Create Shiny subsets ----

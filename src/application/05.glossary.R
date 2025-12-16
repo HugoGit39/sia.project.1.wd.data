@@ -399,3 +399,27 @@ glos <- list(
 )
 
 saveRDS(glos, file = "glos.rds")
+
+
+
+
+df_codebook <- map_dfr(names(glos), function(letter) {
+  html_text <- glos[[letter]] %>%
+    as.character() %>%
+    read_html() %>%
+    html_nodes("p") %>%
+    html_text(trim = TRUE)
+  
+  if (length(html_text) == 0) {
+    return(data.frame(Letter = letter, Term = NA_character_))
+  }
+  
+  data.frame(
+    Letter = letter,
+    Term   = html_text,
+    stringsAsFactors = FALSE
+  )
+})
+
+saveRDS(df_codebook, file = "df_codebook.rds")
+
