@@ -400,8 +400,30 @@ glos <- list(
 
 saveRDS(glos, file = "glos.rds")
 
-
-
+########################################################################
+# Glossary Codebook Export (df_codebook)
+#
+# Purpose:
+#   Converts the Shiny glossary object (glos) into a simple, flat
+#   codebook table that can be reused elsewhere (e.g., search, QA,
+#   documentation, exports).
+#
+# What it does:
+#   - Iterates over each letter in the glossary (A–Z).
+#   - Extracts the text from <p> tags inside the stored HTML/Tag objects.
+#   - Produces a long-format data frame with:
+#       Letter = glossary letter (A, B, C, ...)
+#       Term   = one extracted paragraph / term description per row
+#   - Ensures letters with no content are still present (Term = NA).
+#
+# Structure:
+#   df_codebook <- data.frame(
+#     Letter = character(),
+#     Term   = character()
+#   )
+#
+# Stress in Action 2025
+########################################################################
 
 df_codebook <- map_dfr(names(glos), function(letter) {
   html_text <- glos[[letter]] %>%
@@ -422,4 +444,75 @@ df_codebook <- map_dfr(names(glos), function(letter) {
 })
 
 saveRDS(df_codebook, file = "df_codebook.rds")
+
+########################################################################
+# Recent Updates (updates)
+#
+# Purpose:
+#   Defines the changelog shown in the “Recent Updates” card of the
+#   Stress in Action Wearables App. It provides users with a concise
+#   overview of major releases, feature additions, and database/UI
+#   updates.
+#
+# Structure:
+#   updates <- tagList(
+#     strong("2025"),           # Year header
+#     tags$ul(                  # List of monthly updates
+#       tags$li(strong("Month"), " — description"),
+#       ...
+#     )
+#   )
+#
+# Stress in Action 2025
+########################################################################
+
+updates <- tagList(
+  
+  strong("2025", style = "color:#1c75bc; margin-top: 5px;"),
+  
+  tags$ul(
+    style = "padding-left: 15px;",
+    
+    tags$li(
+      strong("December"),
+      " — Substantial update: all wearable details available and improved user experience (hover info, UI polish)."
+    ),
+    tags$li(
+      strong("September"),
+      " — Live release."
+    ),
+    tags$li(
+      strong("August"),
+      " — Tables updated with bars, yes/no indicators, and color-coded cells."
+    ),
+    tags$li(
+      strong("July"),
+      " — Submit Data module live."
+    ),
+    tags$li(
+      strong("June"),
+      " — 54 wearables included in the app."
+    ),
+    tags$li(
+      strong("May"),
+      " — Stress in Action wearables database paper published."
+    ),
+    tags$li(
+      strong("March"),
+      " — Feature Filter live."
+    ),
+    tags$li(
+      strong("February"),
+      " — Product Filter live."
+    ),
+    tags$li(
+      strong("January"),
+      " — Test version (MVP) live."
+    )
+  )
+)
+
+saveRDS(updates, "updates.rds")
+
+
 
