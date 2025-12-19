@@ -20,7 +20,7 @@ The workflow follows best practices from _[Reproducible Science in Ecology & Evo
 ## Repository structure
 
 ```bash
-sia.project.1.wi.data/
+sia.project.1.ws.data/
 ├─ data/
 │  ├─ processed/           
 │  ├─ raw/                 
